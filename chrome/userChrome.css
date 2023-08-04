@@ -1,0 +1,14 @@
+@import url("menus.css");
+@import url("uc-findbar.css");
+@import url("sidebar.css");
+@import url("arc.css");
+@import url("extensions-view.css");
+
+#webrtcIndicator {
+  display: none;
+}
+
+/*#unified-extensions-button {
+	display: none;
+}
+*/

@@ -1,0 +1,27 @@
+/* attempt to recreate some of arc's nice design */
+
+:root:not([sizemode="fullscreen"]) #appcontent {
+  /*position: relative;*/
+  /* padding: 8px; */
+  /* clip-path: inset(8px 8px 8px 8px round 8px); */
+  margin: 8px;
+  box-shadow: 0px 0px 4px black;
+  border-radius: 8px;
+}
+
+#browser {
+  /* background-color: var(--toolbar-bgcolor); */
+  background-color: var(--tabpanel-background-color);
+}
+
+:root:not([sizemode="fullscreen"]) #tabbrowser-tabbox {
+  clip-path: inset(0px 0px 0px 0px round 8px);
+}
+
+
+/* rounded window corners */
+
+#main-window[sizemode=normal][gtktiledwindow=false] body {
+  clip-path: inset(0 0 0 0 round 8px);
+  /* border-radius: 8px; */
+}

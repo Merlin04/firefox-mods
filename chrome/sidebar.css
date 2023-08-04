@@ -1,0 +1,327 @@
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/window_control_placeholder_support.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Creates placeholders for window controls */
+/* This is a supporting file used by other stylesheets */
+
+/* This stylesheet is pretty much unnecessary if window titlebar is enabled */
+
+/* This file should preferably be imported before other stylesheets */
+
+/* Defaults for window controls on RIGHT side of the window */
+/* Modify these values to match your preferences */
+:root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+  --uc-window-control-width: 138px; /* Space reserved for window controls (Win10) */
+  /* Extra space reserved on both sides of the nav-bar to be able to drag the window */
+  --uc-window-drag-space-pre: 0px; /* left side*/
+  --uc-window-drag-space-post: /*5*/8px; /* right side*/
+}
+
+:root:is([tabsintitlebar][sizemode="maximized"], [sizemode="fullscreen"]) {
+  --uc-window-drag-space-pre: 0px; /* Remove pre space */
+}
+
+@media  (-moz-platform: windows-win7),
+        (-moz-platform: windows-win8),
+        (-moz-os-version: windows-win7),
+        (-moz-os-version: windows-win8){
+  :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+    --uc-window-control-width: 105px;
+  }
+}
+
+@media (-moz-gtk-csd-available) {
+  :root:is([tabsintitlebar],[sizemode="fullscreen"]) {
+    --uc-window-control-width: 84px;
+  }
+}
+
+/* macOS settings are further below */
+.titlebar-buttonbox, #window-controls{ color: var(--toolbar-color) }
+:root[sizemode="fullscreen"] .titlebar-buttonbox-container{ display: none }
+:root[sizemode="fullscreen"] #navigator-toolbox { position: relative; }
+
+:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+:root[sizemode="fullscreen"] #window-controls{
+  position: absolute;
+  display: flex;
+  top: 0;
+  right:0;
+  height: 40px;
+}
+
+:root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+:root[uidensity="compact"][sizemode="fullscreen"] #window-controls{ height: 32px }
+
+#nav-bar{
+  border-inline: var(--uc-window-drag-space-pre,0px) solid var(--toolbar-bgcolor);
+  border-inline-style: solid !important;
+  border-right-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px));
+}
+
+/* Use this pref to check Mac OS where window controls are on left */
+/* This pref defaults to true on Mac and doesn't actually do anything on other platforms. So if your system has window controls on LEFT side you can set the pref to true */
+@supports -moz-bool-pref("layout.css.osx-font-smoothing.enabled"){
+  :root:is([tabsintitlebar], [sizemode="fullscreen"]) {
+    --uc-window-control-width: 72px;
+  }
+  :root[tabsintitlebar="true"]:not([inFullscreen]) #nav-bar{
+    border-inline-width: calc(var(--uc-window-control-width,0px) + var(--uc-window-drag-space-post,0px)) var(--uc-window-drag-space-pre,0px)
+  }
+  :root[sizemode="fullscreen"] #TabsToolbar > .titlebar-buttonbox-container:last-child,
+  :root[sizemode="fullscreen"] #window-controls{ right: unset }
+}
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/hide_tabs_toolbar.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Hides tabs toolbar */
+/* For OSX use hide_tabs_toolbar_osx.css instead */
+
+/* Note, if you have either native titlebar or menubar enabled, then you don't really need this style.
+ * In those cases you can just use: #TabsToolbar{ visibility: collapse !important }
+ */
+
+/* IMPORTANT */
+/*
+Get window_control_placeholder_support.css
+Window controls will be all wrong without it
+*/
+
+:root[tabsintitlebar]{ --uc-toolbar-height: 40px; }
+:root[tabsintitlebar][uidensity="compact"]{ --uc-toolbar-height: 32px }
+
+#TabsToolbar{ visibility: collapse !important }
+
+:root[sizemode="fullscreen"] #TabsToolbar > :is(#window-controls,.titlebar-buttonbox-container){
+  visibility: visible !important;
+  z-index: 2;
+}
+
+:root:not([inFullscreen]) #nav-bar{
+  margin-top: calc(0px - var(--uc-toolbar-height,0px));
+}
+
+:root[tabsintitlebar] #toolbar-menubar[autohide="true"]{
+  min-height: unset !important;
+  height: var(--uc-toolbar-height,0px) !important;
+  position: relative;
+}
+
+#toolbar-menubar[autohide="false"]{
+  margin-bottom: var(--uc-toolbar-height,0px)
+}
+
+:root[tabsintitlebar] #toolbar-menubar[autohide="true"] #main-menubar{
+  -moz-box-flex: 1;
+  -moz-box-align: stretch;
+  background-color: var(--toolbar-bgcolor,--toolbar-non-lwt-bgcolor);
+  background-clip: padding-box;
+  /*border-right: 30px solid transparent;
+  border-image: linear-gradient(to left, transparent, var(--toolbar-bgcolor,--toolbar-non-lwt-bgcolor) 30px) 20 / 30px*/
+
+}
+
+#toolbar-menubar:not([inactive]){ z-index: 2 }
+#toolbar-menubar[autohide="true"][inactive] > #menubar-items {
+  opacity: 0;
+  pointer-events: none;
+  margin-left: var(--uc-window-drag-space-pre,0px)
+}
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/hide_tabs_toolbar.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Hides tabs toolbar */
+/* For OSX use hide_tabs_toolbar_osx.css instead */
+
+/* Note, if you have either native titlebar or menubar enabled, then you don't really need this style.
+ * In those cases you can just use: #TabsToolbar{ visibility: collapse !important }
+ */
+
+/* IMPORTANT */
+/*
+Get window_control_placeholder_support.css
+Window controls will be all wrong without it
+*/
+
+:root[tabsintitlebar]{ --uc-toolbar-height: 40px; }
+:root[tabsintitlebar][uidensity="compact"]{ --uc-toolbar-height: 32px }
+
+#TabsToolbar{ visibility: collapse !important }
+
+:root[sizemode="fullscreen"] #TabsToolbar > :is(#window-controls,.titlebar-buttonbox-container){
+  visibility: visible !important;
+  z-index: 2;
+}
+
+:root:not([inFullscreen]) #nav-bar{
+  margin-top: calc(0px - var(--uc-toolbar-height,0px));
+}
+
+:root[tabsintitlebar] #toolbar-menubar[autohide="true"]{
+  min-height: unset !important;
+  height: var(--uc-toolbar-height,0px) !important;
+  position: relative;
+}
+
+#toolbar-menubar[autohide="false"]{
+  margin-bottom: var(--uc-toolbar-height,0px)
+}
+
+:root[tabsintitlebar] #toolbar-menubar[autohide="true"] #main-menubar{
+  -moz-box-flex: 1; /* Fx < 112 compatibility */
+  flex-grow: 1;
+  -moz-box-align: stretch; /* Fx < 112 compatibility */
+  align-items: stretch;
+  background-color: var(--toolbar-bgcolor,--toolbar-non-lwt-bgcolor);
+  background-clip: padding-box;
+/*  border-right: 30px solid transparent;
+  border-image: linear-gradient(to left, transparent, var(--toolbar-bgcolor,--toolbar-non-lwt-bgcolor) 30px) 20 / 30px*/
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
+}
+
+#toolbar-menubar:not([inactive]){ z-index: 2 }
+#toolbar-menubar[autohide="true"][inactive] > #menubar-items {
+  opacity: 0;
+  pointer-events: none;
+  margin-left: var(--uc-window-drag-space-pre,0px)
+}
+
+
+
+/* custom sidebar header */
+
+/*#sidebar-close {
+  display: none;
+}
+
+#sidebar-header {
+  padding: 2px;
+  font-size: 0.8rem;
+  display: flex;
+  position: absolute;
+  background-color: inherit;
+  border-bottom-right-radius: 8px;
+  border-right: 1px solid var(--sidebar-border-color);
+  top: 1px;
+}
+
+#sidebar-box {
+  position: relative;
+}
+
+#sidebar-title {
+  padding-left: 0;
+}
+
+#sidebar-icon {
+  width: 0;
+}
+
+#sidebar-switcher-target {
+  padding: 0;
+  margin-inline-start: 2px;
+  margin-inline-end: 2px;
+}
+
+/* sidebery css
+
+div.ScrollBox:nth-child(2) > div:nth-child(4) > div:nth-child(1) {
+ padding-top: 26px;
+}
+*/
+
+
+
+/* Element | chrome://browser/content/browser.xhtml */
+
+#sidebar-header {
+  display: none;
+}
+
+/* Element | chrome://browser/content/browser.xhtml */
+/* 264 px */
+#sidebar-splitter {
+  /*width: 2px;
+  border: none;
+  background-color: var(--toolbar-bgcolor) !important;*/
+  display: none;
+}
+
+/* more titlebar tweaks */
+
+#PanelUI-menu-button {
+ padding-inline-end: var(--toolbarbutton-outer-padding);
+}
+
+#sidebar-custom-resizer {
+  position: absolute;
+  /*background-color: red;
+  width: 2px;*/
+  height: 100%;
+  right: 0;
+  z-index: 2;
+  top: 0;
+  cursor: ew-resize;
+  
+  width: 6px;
+  background-color: var(--toolbar-bgcolor);
+  border: 1px ThreeDShadow;
+  border-style: none solid;
+  box-sizing: border-box;
+  /* TODO */
+  /*
+  
+  appearance: none;
+  width: 6px;
+  background-color: var(--toolbar-bgcolor);
+  border: 1px ThreeDShadow;
+  border-style: none solid;
+  
+  -moz-box-align: center;
+  -moz-box-pack: center;
+  -moz-window-dragging: no-drag;
+  
+  
+  */
+}
+
+:root {
+  --sidebar-collapsed-width: 28px;
+}
+
+#sidebar-box {
+  padding-right: 6px;
+  position: relative;
+  
+  width: var(--sidebar-collapsed-width) !important;
+  min-width: var(--sidebar-collapsed-width) !important;
+  max-width: var(--sidebar-collapsed-width) !important;
+  
+  transition: all 0.2s ease-in-out;
+  transition-delay: 0.2s;
+  overflow: hidden;
+  
+  /* will-change: width; TODO does this improve perf? Make it only apply during drag */
+}
+
+.sidebar-custom-resizing #sidebar-box, #sidebar-box:hover {
+  --sidebar-expanded-width: calc(var(--sidebar-width) + 6px);
+  width: var(--sidebar-expanded-width) !important;
+  min-width: var(--sidebar-expanded-width) !important;
+  max-width: var(--sidebar-expanded-width) !important;
+  /*overflow: initial !important;*/
+  transition-delay: 0s;
+}
+
+.sidebar-custom-resizing #sidebar-box {
+  transition: initial !important;
+}
+
+#sidebar {
+  /* override HTML width attribute */
+  width: var(--sidebar-width) !important;
+  min-width: var(--sidebar-width) !important;
+  max-width: var(--sidebar-width) !important;
+}

@@ -1,0 +1,5 @@
+@-moz-document url(about:home), url-prefix(about:newtab) {
+    .non-collapsible-section {
+        display: none !important;
+    }
+}
